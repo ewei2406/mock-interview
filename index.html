@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Website</title>
+  </head>
+  <style>
+    table {
+      margin: 20px;
+    }
+    table,
+    tr {
+      border: 1px solid;
+      border-collapse: collapse;
+    }
+    td {
+      padding: 5px 20px;
+    }
+  </style>
+  <body>
+    <h1>Welcome to My Website</h1>
+
+    <h2>Filters</h2>
+    <label for="start">Start date:</label>
+    <input type="date" id="start" name="start" />
+    <label for="end">End date:</label>
+    <input type="date" id="end" name="end" />
+    <br />
+    <label for="category">Category:</label>
+    <select id="category" name="category">
+      <option value="all">All</option>
+      <option value="school">School</option>
+      <option value="work">Work</option>
+      <option value="home">Home</option>
+    </select>
+    <br />
+    <label for="completed">Completed:</label>
+    <input type="checkbox" id="completed" name="completed" checked />
+    <label for="incomplete">Incomplete:</label>
+    <input type="checkbox" id="incomplete" name="incomplete" checked />
+    <br />
+
+    <h2>Sorting</h2>
+    Sort by
+    <select id="sort" name="sort">
+      <option value="date">Date</option>
+      <option value="name">Name</option>
+      <option value="category">Category</option>
+      <option value="completion">Completion</option>
+    </select>
+    <select id="direction" name="direction">
+      <option value="ascending">ascending</option>
+      <option value="descending">descending</option>
+    </select>
+    <br /><br />
+    <button onclick="apply()">Apply Filters and Sorting</button>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Task Name</th>
+          <th>Date</th>
+          <th>Category</th>
+          <th>Completed</th>
+        </tr>
+      </thead>
+      <tbody id="tasks">
+        <tr>
+          <td>Hello</td>
+          <td>Hello</td>
+          <td>Hello</td>
+          <td>Hello</td>
+        </tr>
+      </tbody>
+    </table>
+  </body>
+  <script>
+    const data = [
+      {
+        Date: "2024-09-10",
+        Name: "Task 1",
+        Category: "school",
+        Completed: false,
+      },
+      {
+        Date: "2024-09-10",
+        Name: "Task 2",
+        Category: "school",
+        Completed: true,
+      },
+      {
+        Date: "2024-09-11",
+        Name: "Task 3",
+        Category: "work",
+        Completed: true,
+      },
+      {
+        Date: "2024-09-11",
+        Name: "Task 4",
+        Category: "home",
+        Completed: false,
+      },
+      {
+        Date: "2024-09-12",
+        Name: "Task 5",
+        Category: "home",
+        Completed: false,
+      },
+      {
+        Date: "2024-09-12",
+        Name: "Task 6",
+        Category: "work",
+        Completed: true,
+      },
+      {
+        Date: "2024-09-13",
+        Name: "Task 7",
+        Category: "school",
+        Completed: false,
+      },
+      {
+        Date: "2024-09-13",
+        Name: "Task 8",
+        Category: "home",
+        Completed: true,
+      },
+      {
+        Date: "2024-09-14",
+        Name: "Task 9",
+        Category: "work",
+        Completed: false,
+      },
+      {
+        Date: "2024-09-14",
+        Name: "Task 10",
+        Category: "work",
+        Completed: false,
+      },
+      {
+        Date: "2024-09-15",
+        Name: "Task 11",
+        Category: "home",
+        Completed: true,
+      },
+      {
+        Date: "2024-09-15",
+        Name: "Task 12",
+        Category: "school",
+        Completed: true,
+      },
+      {
+        Date: "2024-09-16",
+        Name: "Task 13",
+        Category: "school",
+        Completed: false,
+      },
+      {
+        Date: "2024-09-16",
+        Name: "Task 14",
+        Category: "work",
+        Completed: true,
+      },
+      {
+        Date: "2024-09-17",
+        Name: "Task 15",
+        Category: "home",
+        Completed: false,
+      },
+      {
+        Date: "2024-09-17",
+        Name: "Task 16",
+        Category: "school",
+        Completed: true,
+      },
+      {
+        Date: "2024-09-18",
+        Name: "Task 17",
+        Category: "work",
+        Completed: false,
+      },
+      {
+        Date: "2024-09-18",
+        Name: "Task 18",
+        Category: "home",
+        Completed: false,
+      },
+      {
+        Date: "2024-09-19",
+        Name: "Task 19",
+        Category: "work",
+        Completed: true,
+      },
+      {
+        Date: "2024-09-19",
+        Name: "Task 20",
+        Category: "school",
+        Completed: false,
+      },
+    ];
+
+    const apply = () => {
+      const startDate = document.getElementById("start").value;
+      const endDate = document.getElementById("end").value;
+
+      let filtered = data;
+      if (startDate) {
+        // Keep only days that are after the start date
+        filtered = filtered.filter((task) => task.Date - startDate > 0);
+      }
+      if (endDate) {
+        // Keep only days that are before the end date
+        filtered = filtered.filter((task) => task.Date - endDate < 0);
+      }
+
+      // Implement filtering by category
+      // The possible values for category are "all", "school", "work", and "home"
+      const category = document.getElementById("category").value;
+
+      // Implement filtering by completion
+      const showCompleted = document.getElementById("completed").checked;
+      const showIncomplete = document.getElementById("incomplete").checked;
+
+      // Implement sorting
+      const sortField = document.getElementById("sort").value;
+      const sortDirection = document.getElementById("direction").value;
+
+      render(filtered);
+    };
+
+    const render = (data) => {
+      const str = data.reduce((prev, entry) => {
+        return (
+          prev +
+          `
+            <tr>
+                <td>${entry.Name}</td>
+                <td>${entry.Date}</td>
+                <td>${entry.Category}</td>
+                <td>${entry.Completed}</td>
+            </tr>
+            `
+        );
+      }, "");
+      const tasks = document.getElementById("tasks");
+      tasks.innerHTML = str;
+    };
+    render(data);
+  </script>
+</html>
